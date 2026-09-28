@@ -3,7 +3,7 @@
 > 更新日期：2026-09-28
 > 当前阶段：新版事项与自定义 Agent、CD1 接续、MD1 Markdown、AT1 团队、MT1/MT2 资料记忆、WS1—WS4 工作区及 MC1/MC2 模型选择均已完成隔离验收；面试选择题与词汇开放题的真实 DeepSeek 新交互已在虚构场景复验，个人真实使用效果待评估。
 > 当前焦点：事项主区作答、Markdown、真实流式正文及供应商思考字段已完成两条真实模型闭环；多渠道及事项级路由的第三方模型仍只用合成凭据和 mock 验证。此前空素材面试与词汇七日真实 DeepSeek 链路不代表新增渠道的生成质量。
-> 公开展示：用户已授权公开源码仓库和个人网站 `/LifeAndLearn` 单页入口；应用继续本地单用户运行。发布范围、排除项、验证和恢复见[公开展示发布](release/PUBLIC-SHARING.md)。
+> 公开展示：源码已发布到 [GitHub 公开仓库](https://github.com/wjlGitHub2021/LifeAndLearn)，个人网站 [LifeAndLearn 单页](https://orizuru.top/LifeAndLearn) 已上线；应用继续本地单用户运行。排除项、验证和恢复见[公开展示发布](release/PUBLIC-SHARING.md)。
 > 本地数据：2026-09-28 按用户确认的 mock 数据清理授权，默认库 3 件业务事项及练习、运行、成果已清空；保留 3 个内置角色、2 个预设 Agent，原 `3000` 进程中的 DeepSeek 连接仍在。`3211`、`3212` 的一次性服务和库均已清理；不同数据库的日程互不共享。见[真实复验](quality/MVP-VERIFICATION.md#真实-deepseek-面试与词汇全链路复验2026-09-28)及[一次性测试数据约定](operations/RUNBOOK.md#一次性测试数据)。
 
 ## 立即入口

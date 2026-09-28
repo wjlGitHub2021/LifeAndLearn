@@ -1,7 +1,8 @@
 # 公开展示发布
 
-> 状态：准备中；完成状态以本页的实际验证记录为准。
+> 状态：已发布；应用仍为本地单用户 MVP。
 > 授权日期：2026-09-28
+> 发布日期：2026-09-28
 
 ## 范围与目的
 
@@ -24,4 +25,8 @@
 
 ## 验证记录
 
-待本次公开发布和线上检查完成后填写实际结果；不得把本地构建推定为线上可访问。
+- 公开仓库：[wjlGitHub2021/LifeAndLearn](https://github.com/wjlGitHub2021/LifeAndLearn)，GitHub 显示 `PUBLIC`，默认分支为 `main`。首次提交 `4b4b001` 包含 97 个文件、约 1.5 MB；远端树未包含 `data/`、`tmp/`、`var/`、`.next/`、`node_modules/` 或 `.env`。本地高置信度凭据模式扫描未发现匹配；这不能保证所有形式的敏感信息都已被自动识别。
+- 以首次提交清单复制到全新隔离目录后，`npm ci --no-audit --no-fund`、`npm test` **132/132**、`npm run typecheck`、`npm run build` 全部通过；隔离生产服务首页返回 HTTP 200，随后已停止。未调用真实模型。
+- 个人网站在独立干净检出中只提交 `astro.config.mjs`、`src/config/menu.ts` 和 `src/pages/LifeAndLearn.astro`，提交号 `6dd2a42`；原网站工作树的其他未提交改动没有进入该提交。网站测试先全量通过，导航定点复验 **13/13**，`npm run build` 通过。
+- 网站 `npm run typecheck` 仍有一条与本页无关的既有错误：`src/pages/works/[slug].astro:90` 中 `work.slug` 类型为 `never`；本次页面无新增类型错误，网站构建与部署成功。该既有错误未在本次发布中扩大修复范围。
+- 线上页面 [orizuru.top/LifeAndLearn](https://orizuru.top/LifeAndLearn) 返回 HTTP 200，真实浏览器可见介绍、仓库入口和本地体验步骤；页面带 `noindex`，线上 sitemap 不包含该路径。构建后的站内搜索索引不包含该页，其他页面未出现指向它的链接。390px 检查中页面 `scrollWidth=375px`，未见横向溢出。
