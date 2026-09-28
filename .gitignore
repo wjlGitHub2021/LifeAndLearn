@@ -1,0 +1,25 @@
+node_modules/
+.next/
+data/
+*.tsbuildinfo
+
+# Local builds, test runs, and runtime state
+.tmp/
+tmp/
+var/
+coverage/
+test-results/
+playwright-report/
+.vercel/
+*.sqlite
+*.sqlite-*
+*.db
+*.db-*
+*.backup-*
+*.log
+.DS_Store
+
+# Never publish credentials
+.env
+.env.*
+!.env.example

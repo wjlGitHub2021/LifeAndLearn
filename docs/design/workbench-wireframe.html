@@ -1,0 +1,485 @@
+<style>
+#personal-workbench {
+  color-scheme: dark;
+  --pw-bg: #1b1c20;
+  --pw-surface: #222329;
+  --pw-ink: #ececf1;
+  --pw-muted: #a0a3b0;
+  --pw-line: #34363e;
+  --pw-soft: #303138;
+  --pw-strong: #e1e2e8;
+  --pw-on-strong: #25262c;
+  color: var(--pw-ink); background: var(--pw-bg);
+  font: 14px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  border: 1px solid var(--pw-line); border-radius: 12px; overflow-wrap: anywhere;
+  display: grid; grid-template-columns: 180px minmax(0, 1fr); min-height: 680px;
+}
+#personal-workbench[data-theme="light"] {
+  color-scheme: light;
+  --pw-bg: #ffffff; --pw-surface: #f7f8fa; --pw-ink: #252735; --pw-muted: #626977;
+  --pw-line: #e1e3e8; --pw-soft: #e9ebef; --pw-strong: #303440; --pw-on-strong: #ffffff;
+}
+#personal-workbench[data-theme="blue"] {
+  color-scheme: light;
+  --pw-bg: #f8faff; --pw-surface: #edf2fb; --pw-ink: #20314e; --pw-muted: #526581;
+  --pw-line: #d5dfef; --pw-soft: #dfe9fc; --pw-strong: #315fa8; --pw-on-strong: #ffffff;
+}
+#personal-workbench[data-theme="green"] {
+  color-scheme: light;
+  --pw-bg: #f7faf7; --pw-surface: #eaf2eb; --pw-ink: #223c31; --pw-muted: #536d5d;
+  --pw-line: #d3e1d6; --pw-soft: #dcecdf; --pw-strong: #336b4c; --pw-on-strong: #ffffff;
+}
+#personal-workbench[data-theme="sand"] {
+  color-scheme: light;
+  --pw-bg: #fcf9f4; --pw-surface: #f3ece1; --pw-ink: #45352c; --pw-muted: #786353;
+  --pw-line: #e5d9c9; --pw-soft: #eee0cd; --pw-strong: #8b5935; --pw-on-strong: #ffffff;
+}
+#personal-workbench * { box-sizing: border-box; }
+#personal-workbench [hidden] { display: none !important; }
+#personal-workbench h1, #personal-workbench h2, #personal-workbench h3, #personal-workbench p { margin: 0; }
+#personal-workbench h1 { font-size: 25px; font-weight: 500; line-height: 1.4; letter-spacing: -.04em; }
+#personal-workbench h2 { font-size: 15px; font-weight: 500; }
+#personal-workbench h3 { font-size: 14px; font-weight: 500; }
+#personal-workbench button, #personal-workbench select, #personal-workbench textarea { font: inherit; color: inherit; }
+#personal-workbench button, #personal-workbench select { min-height: 34px; padding: 6px 11px; border: 1px solid var(--pw-line); border-radius: 6px; background: var(--pw-bg); }
+#personal-workbench button:disabled { opacity: .55; cursor: not-allowed; }
+#personal-workbench button.pw-primary { background: var(--pw-strong); color: var(--pw-on-strong); border-color: var(--pw-strong); }
+#personal-workbench button.pw-quiet { background: transparent; border-color: transparent; padding-left: 0; }
+#personal-workbench button:hover:not(:disabled) { border-color: var(--pw-ink); }
+#personal-workbench textarea { width: 100%; min-height: 144px; resize: vertical; padding: 12px; border: 1px solid var(--pw-line); border-radius: 6px; background: var(--pw-surface); font-size: 16px; }
+#personal-workbench .pw-top { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; align-items: center; padding: 15px 28px; border-bottom: 1px solid var(--pw-line); background: var(--pw-bg); border-radius: 0 12px 0 0; }
+#personal-workbench .pw-brand { font-weight: 500; letter-spacing: .025em; }
+#personal-workbench .pw-note, #personal-workbench .pw-meta { color: var(--pw-muted); font-size: 12px; }
+#personal-workbench .pw-nav { display: grid; gap: 5px; }
+#personal-workbench .pw-nav button { display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; background: transparent; border-color: transparent; color: var(--pw-muted); }
+#personal-workbench .pw-nav button[aria-pressed="true"] { background: var(--pw-soft); color: var(--pw-strong); }
+#personal-workbench .pw-main { padding: 32px 28px; flex: 1; }
+#personal-workbench .pw-heading { display: flex; gap: 20px; flex-wrap: wrap; justify-content: space-between; align-items: center; margin-bottom: 26px; }
+#personal-workbench .pw-heading p { color: var(--pw-muted); margin-top: 6px; }
+#personal-workbench .pw-budget { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+#personal-workbench .pw-columns { display: grid; grid-template-columns: minmax(0, 1fr) 200px; gap: 24px; align-items: start; }
+#personal-workbench .pw-columns > * { min-width: 0; }
+#personal-workbench[data-evidence="below"] .pw-columns { grid-template-columns: minmax(0, 1fr); }
+#personal-workbench .pw-box { background: var(--pw-bg); padding: 0; }
+#personal-workbench .pw-stack > * + * { margin-top: 28px; }
+#personal-workbench .pw-row { display: flex; gap: 12px; flex-wrap: wrap; justify-content: space-between; align-items: center; }
+#personal-workbench .pw-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+#personal-workbench .pw-tag { display: inline-block; background: var(--pw-surface); color: var(--pw-muted); padding: 2px 7px; border-radius: 4px; font-size: 12px; }
+#personal-workbench .pw-timebar { display: flex; height: 7px; gap: 3px; margin: 15px 0 8px; }
+#personal-workbench .pw-timebar span { min-width: 0; background: var(--pw-strong); }
+#personal-workbench .pw-timebar span:nth-child(2) { opacity: .5; }
+#personal-workbench .pw-timebar span:nth-child(3) { opacity: .18; }
+#personal-workbench .pw-task { border-top: 1px solid var(--pw-line); padding: 22px 0; display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 14px; align-items: center; }
+#personal-workbench .pw-task:first-child { margin-top: 12px; }
+#personal-workbench .pw-task:last-child { padding-bottom: 0; }
+#personal-workbench .pw-task p { color: var(--pw-muted); margin: 5px 0 9px; }
+#personal-workbench .pw-task h3 { font-size: 15px; }
+#personal-workbench .pw-task-action { display: flex; flex-direction: column; align-items: end; gap: 8px; }
+#personal-workbench .pw-agent { padding: 16px 0; border-top: 1px solid var(--pw-line); }
+#personal-workbench .pw-agent:first-of-type { margin-top: 10px; }
+#personal-workbench .pw-agent p { color: var(--pw-muted); font-size: 12px; margin-top: 3px; }
+#personal-workbench .pw-proposal { margin-bottom: 24px; border: 1px solid var(--pw-line); background: var(--pw-surface); border-radius: 8px; padding: 18px; }
+#personal-workbench .pw-proposal ul { padding-left: 20px; margin: 12px 0; }
+#personal-workbench .pw-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 14px; }
+#personal-workbench .pw-inline-note { margin-top: 12px; color: var(--pw-muted); font-size: 12px; }
+#personal-workbench details { margin-top: 14px; border-top: 1px solid var(--pw-line); padding-top: 12px; }
+#personal-workbench summary { font-weight: 500; }
+#personal-workbench details p { margin-top: 8px; color: var(--pw-muted); }
+#personal-workbench .pw-step { border-left: 2px solid var(--pw-line); margin: 12px 0; padding-left: 12px; }
+#personal-workbench .pw-step p { margin-top: 4px; color: var(--pw-muted); font-size: 12px; }
+#personal-workbench .pw-instruction { margin: 12px 0 18px; }
+#personal-workbench .pw-field-label { display: block; margin: 16px 0 7px; }
+#personal-workbench .pw-feedback { margin-top: 20px; padding: 16px; background: var(--pw-soft); border-radius: 6px; }
+#personal-workbench .pw-feedback p { margin-top: 8px; }
+#personal-workbench .pw-memory { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--pw-line); }
+#personal-workbench .pw-footer { padding: 12px 28px; border-top: 1px solid var(--pw-line); color: var(--pw-muted); font-size: 12px; }
+#personal-workbench #pw-notice { margin-top: 12px; color: var(--pw-muted); }
+#personal-workbench[data-density="compact"] .pw-task { padding-top: 12px; padding-bottom: 12px; }
+#personal-workbench[data-density="compact"] .pw-main { padding: 18px; }
+#personal-workbench .pw-sidebar { padding: 24px 12px 16px; background: var(--pw-surface); border-right: 1px solid var(--pw-line); border-radius: 12px 0 0 12px; display: flex; flex-direction: column; gap: 26px; min-width: 0; }
+#personal-workbench .pw-workspace-brand { display:flex; align-items:center; gap:10px; padding:0 8px; }
+#personal-workbench .pw-monogram { width:28px; height:28px; flex:none; display:grid; place-items:center; border-radius:8px; background:var(--pw-strong); color:var(--pw-on-strong); font-size:15px; font-weight:500; }
+#personal-workbench .pw-sidebar-label { color:var(--pw-muted); font-size:11px; letter-spacing:.07em; padding:0 10px; margin-bottom:8px; }
+#personal-workbench .pw-sidebar-goal { color:var(--pw-muted); padding:7px 10px; font-size:12px; display:flex; gap:9px; align-items:center; }
+#personal-workbench .pw-dot { height:6px; width:6px; border-radius:50%; background:var(--pw-strong); flex:none; }
+#personal-workbench .pw-dot.pw-dot-muted { background:var(--pw-muted); }
+#personal-workbench .pw-sidebar-bottom { margin-top:auto; border-top:1px solid var(--pw-line); padding:16px 8px 0; color:var(--pw-muted); font-size:12px; }
+#personal-workbench .pw-content { min-width:0; display:flex; flex-direction:column; }
+#personal-workbench .pw-breadcrumb { display:flex; align-items:center; gap:10px; font-size:12px; color:var(--pw-muted); }
+#personal-workbench .pw-breadcrumb span:last-child { color:var(--pw-ink); }
+#personal-workbench .pw-budget-strip { border:1px solid var(--pw-line); border-radius:8px; background:var(--pw-surface); padding:16px; }
+#personal-workbench .pw-columns > aside { border-left:1px solid var(--pw-line); padding-left:20px; }
+#personal-workbench[data-evidence="below"] .pw-columns > aside { border-left:0; border-top:1px solid var(--pw-line); padding:20px 0 0; }
+#personal-workbench .pw-section-kicker { text-transform:uppercase; font-size:11px; letter-spacing:.12em; color:var(--pw-muted); margin-bottom:8px; }
+#personal-workbench .pw-index { display:inline-block; color:var(--pw-strong); font-size:12px; margin-right:8px; font-variant-numeric:tabular-nums; }
+#personal-workbench .pw-profile { display:grid; grid-template-columns:34px minmax(0,1fr); gap:14px; padding:22px 0; border-top:1px solid var(--pw-line); }
+#personal-workbench .pw-profile p { margin-top:6px; color:var(--pw-muted); }
+#personal-workbench .pw-avatar { display:grid; place-items:center; width:34px; height:34px; border-radius:9px; color:var(--pw-strong); background:var(--pw-soft); font-size:12px; }
+#personal-workbench .pw-simple-row { border-top:1px solid var(--pw-line); padding:22px 0; }
+#personal-workbench .pw-simple-row p { margin:8px 0; color:var(--pw-muted); }
+#personal-workbench .pw-empty { padding:32px 0; color:var(--pw-muted); }
+#personal-workbench .pw-top .pw-tag { font-size:11px; }
+#personal-workbench .pw-theme-controls { display:flex; flex-wrap:wrap; align-items:center; gap:8px; }
+#personal-workbench .pw-theme-group { display:flex; gap:3px; padding:3px; background:var(--pw-surface); border-radius:8px; }
+#personal-workbench .pw-theme-group button { display:flex; align-items:center; gap:6px; border-color:transparent; background:transparent; font-size:12px; padding:4px 8px; }
+#personal-workbench .pw-theme-group button[aria-pressed="true"] { background:var(--pw-bg); border-color:var(--pw-line); color:var(--pw-strong); }
+#personal-workbench .pw-theme-swatch { width:9px; height:9px; border-radius:50%; background:var(--pw-swatch); }
+@media (max-width: 940px) {
+  #personal-workbench .pw-columns { grid-template-columns: minmax(0, 1fr); }
+  #personal-workbench .pw-columns > aside { border-left:0; border-top:1px solid var(--pw-line); padding:20px 0 0; }
+  #personal-workbench .pw-heading { gap: 14px; }
+}
+@media (max-width: 600px) {
+  #personal-workbench { grid-template-columns:minmax(0,1fr); }
+  #personal-workbench .pw-sidebar { border-right:0; border-bottom:1px solid var(--pw-line); border-radius:12px 12px 0 0; gap:16px; padding:16px; }
+  #personal-workbench .pw-nav { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  #personal-workbench .pw-sidebar-label, #personal-workbench .pw-sidebar-goals, #personal-workbench .pw-sidebar-bottom { display:none; }
+  #personal-workbench .pw-main { padding:24px 18px; }
+}
+@media (max-width: 440px) {
+  #personal-workbench .pw-main, #personal-workbench .pw-top { padding: 16px; }
+  #personal-workbench .pw-task { grid-template-columns: minmax(0, 1fr); }
+  #personal-workbench .pw-task-action { align-items: start; flex-direction: row; flex-wrap: wrap; }
+  #personal-workbench .pw-proposal, #personal-workbench .pw-budget-strip { padding: 14px; }
+}
+@media (pointer: coarse) {
+  #personal-workbench button, #personal-workbench select { min-height: 44px; }
+}
+</style>
+
+<section id="personal-workbench" aria-label="个人 Agent 工作台交互草图" data-evidence="side" data-density="comfortable" data-theme="dark">
+  <aside class="pw-sidebar" aria-label="工作区导航">
+    <div class="pw-workspace-brand"><span class="pw-monogram" aria-hidden="true">P</span><div><div class="pw-brand">个人工作台</div><div class="pw-meta">Personal workspace</div></div></div>
+    <div>
+      <div class="pw-sidebar-label">工作区</div>
+      <nav class="pw-nav" aria-label="主导航">
+        <button type="button" id="pw-nav-today" class="cursor-interaction" aria-pressed="true"><i data-lucide="sun" aria-hidden="true"></i>今天</button>
+        <button type="button" id="pw-nav-goals" class="cursor-interaction" aria-pressed="false"><i data-lucide="target" aria-hidden="true"></i>目标</button>
+        <button type="button" id="pw-nav-team" class="cursor-interaction" aria-pressed="false"><i data-lucide="users" aria-hidden="true"></i>Agent 团队</button>
+        <button type="button" id="pw-nav-history" class="cursor-interaction" aria-pressed="false"><i data-lucide="history" aria-hidden="true"></i>执行记录</button>
+      </nav>
+    </div>
+    <div class="pw-sidebar-goals"><div class="pw-sidebar-label">关注中的目标</div><div class="pw-sidebar-goal"><span class="pw-dot"></span>求职准备</div><div class="pw-sidebar-goal"><span class="pw-dot pw-dot-muted"></span>英语学习</div></div>
+    <div class="pw-sidebar-bottom">个人空间<div class="pw-meta">本地交互草图 · v0.3</div><div class="pw-meta">示例数据 · 未接入模型</div></div>
+  </aside>
+  <div class="pw-content">
+  <header class="pw-top">
+    <div class="pw-breadcrumb"><span>工作区</span><span aria-hidden="true">/</span><span id="pw-breadcrumb">今天</span></div>
+    <div class="pw-theme-controls" aria-label="外观设置">
+      <div class="pw-theme-group" role="group" aria-label="主题模式">
+        <button type="button" id="pw-mode-neutral" class="cursor-interaction" aria-pressed="true" aria-controls="pw-neutral-options">明暗主题</button>
+        <button type="button" id="pw-mode-color" class="cursor-interaction" aria-pressed="false" aria-controls="pw-color-options">主题色</button>
+      </div>
+      <div id="pw-neutral-options" class="pw-theme-group" role="group" aria-label="固定明暗主题">
+        <button type="button" id="pw-theme-light" class="cursor-interaction" aria-pressed="false">浅色</button>
+        <button type="button" id="pw-theme-dark" class="cursor-interaction" aria-pressed="true">深色</button>
+      </div>
+      <div id="pw-color-options" class="pw-theme-group" role="group" aria-label="独立配色方案" hidden>
+        <button type="button" id="pw-theme-blue" class="cursor-interaction" aria-pressed="false"><span class="pw-theme-swatch" style="--pw-swatch:#315fa8" aria-hidden="true"></span>雾蓝</button>
+        <button type="button" id="pw-theme-green" class="cursor-interaction" aria-pressed="false"><span class="pw-theme-swatch" style="--pw-swatch:#336b4c" aria-hidden="true"></span>松绿</button>
+        <button type="button" id="pw-theme-sand" class="cursor-interaction" aria-pressed="false"><span class="pw-theme-swatch" style="--pw-swatch:#8b5935" aria-hidden="true"></span>暖棕</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="pw-main">
+    <section id="pw-today" aria-labelledby="pw-today-heading">
+      <div class="pw-heading">
+        <div><div class="pw-section-kicker">YOUR DAILY FOCUS</div><h1 id="pw-today-heading">今天</h1><p>两个目标，一份可执行的安排。</p></div>
+        <div><label for="pw-budget" class="pw-meta">今天可用的时间</label><div class="pw-budget"><select id="pw-budget" class="cursor-interaction"><option value="90">90 分钟</option><option value="30">30 分钟</option></select><button id="pw-propose" type="button" class="cursor-interaction">查看调整</button></div></div>
+      </div>
+      <section id="pw-proposal" class="pw-box pw-proposal" aria-labelledby="pw-proposal-title" hidden>
+        <div class="pw-row"><h2 id="pw-proposal-title">协调员提出了一份新安排</h2><span class="pw-tag">待你决定</span></div>
+        <p id="pw-proposal-reason" class="pw-inline-note"></p>
+        <ul id="pw-proposal-list"></ul>
+        <div class="pw-actions"><button id="pw-accept" type="button" class="pw-primary cursor-interaction">采用这份安排</button><button id="pw-cancel" type="button" class="cursor-interaction">保留原安排</button></div>
+      </section>
+      <div class="pw-columns">
+        <div class="pw-stack">
+          <section class="pw-budget-strip" aria-labelledby="pw-goals-heading">
+            <div class="pw-row"><h2 id="pw-goals-heading">今日时间分配</h2><span class="pw-meta">面试准备优先</span></div>
+            <div class="pw-timebar" aria-hidden="true"><span id="pw-bar-career"></span><span id="pw-bar-english"></span><span id="pw-bar-buffer"></span></div>
+            <p id="pw-allocation" class="pw-meta"></p>
+          </section>
+          <section class="pw-box" aria-labelledby="pw-tasks-heading">
+            <div class="pw-row"><h2 id="pw-tasks-heading">今天的任务</h2><span class="pw-meta" id="pw-plan-label"></span></div>
+            <div id="pw-task-list"></div>
+          </section>
+          <details><summary class="cursor-interaction">为什么这样安排？</summary><p id="pw-plan-reason"></p></details>
+        </div>
+        <aside class="pw-box" aria-labelledby="pw-team-heading">
+          <h2 id="pw-team-heading">协作中的 Agent</h2>
+          <div class="pw-agent"><h3>求职顾问 <span class="pw-tag" id="pw-career-status"></span></h3><p>负责面试任务与回答反馈。</p></div>
+          <div class="pw-agent"><h3>英语教练 <span class="pw-tag" id="pw-english-status"></span></h3><p>负责写作训练与薄弱点记录。</p></div>
+          <div class="pw-agent"><h3>日程协调员 <span class="pw-tag">安排已就绪</span></h3><p>汇总任务需求，协调时间与优先级。</p></div>
+          <details><summary class="cursor-interaction">共享了什么信息？</summary><p>可用时间、目标优先级和任务摘要。原始回答归对应教练；跨角色不会默认共享全文。</p></details>
+        </aside>
+      </div>
+    </section>
+
+    <section id="pw-detail" aria-labelledby="pw-task-heading" hidden>
+      <button type="button" id="pw-back" class="pw-quiet cursor-interaction">← 回到今天</button>
+      <div class="pw-heading" style="margin-top: 12px">
+        <div><div id="pw-task-meta" class="pw-meta"></div><h1 id="pw-task-heading"></h1></div>
+        <span id="pw-detail-status" class="pw-tag"></span>
+      </div>
+      <div class="pw-columns">
+        <section class="pw-box" aria-labelledby="pw-practice-heading">
+          <h2 id="pw-practice-heading">本次练习</h2>
+          <p id="pw-prompt" class="pw-instruction"></p>
+          <div id="pw-answer-form">
+            <label for="pw-answer" class="pw-field-label">你的回答</label>
+            <textarea id="pw-answer" maxlength="4000" placeholder="在这里试写，或使用下方示例回答。输入仅保留在当前草图会话中。"></textarea>
+            <div class="pw-actions"><button type="button" id="pw-fill" class="cursor-interaction">填入示例回答</button><button type="button" id="pw-submit" class="pw-primary cursor-interaction">提交并预览反馈</button></div>
+            <div class="pw-inline-note"><label><input id="pw-fail-next" type="checkbox"> 演示下一次提交失败</label></div>
+          </div>
+          <div id="pw-input-error" role="alert" hidden></div>
+          <p id="pw-running" class="pw-inline-note" hidden>正在演示处理状态…</p>
+          <div id="pw-failure" class="pw-feedback" role="alert" hidden><h3>本次处理未完成（模拟失败）</h3><p>你的回答仍在。可以重试，任务不会被标记为完成。</p><button id="pw-retry" type="button" class="cursor-interaction" style="margin-top: 12px">重试示例流程</button></div>
+          <div id="pw-feedback" class="pw-feedback" hidden>
+            <h3>示例反馈</h3><p class="pw-meta">以下是预设内容，用于讨论交互；不是模型对你输入的真实评价。</p>
+            <p id="pw-feedback-text"></p>
+            <div class="pw-memory"><h3>下一次可以怎样安排</h3><p id="pw-next-step"></p><div class="pw-actions"><button id="pw-save-memory" type="button" class="cursor-interaction">采用下次训练建议</button><button id="pw-finish" type="button" class="pw-primary cursor-interaction">结束本次练习</button></div><p id="pw-memory-status" class="pw-meta"></p></div>
+          </div>
+        </section>
+        <aside class="pw-box" aria-labelledby="pw-evidence-heading">
+          <h2 id="pw-evidence-heading">这项任务怎么来的</h2>
+          <div class="pw-step"><h3>1 · 你的目标</h3><p id="pw-origin"></p></div>
+          <div class="pw-step"><h3>2 · 领域 Agent 提议</h3><p id="pw-specialist"></p></div>
+          <div class="pw-step"><h3>3 · 协调员安排</h3><p id="pw-coordination"></p></div>
+          <details open><summary class="cursor-interaction">记录与记忆</summary><p id="pw-memory-evidence"></p></details>
+        </aside>
+      </div>
+    </section>
+    <section id="pw-goals" aria-labelledby="pw-goals-title" hidden>
+      <div class="pw-heading"><div><div class="pw-section-kicker">GOALS</div><h1 id="pw-goals-title">目标</h1><p>把长期方向，变成今天的具体行动。</p></div><span class="pw-tag">2 个示例目标</span></div>
+      <div class="pw-simple-row"><div class="pw-row"><h2>准备产品经理面试</h2><span class="pw-tag">近期优先</span></div><p>示例截止：明天。由求职顾问负责练习，协调员分配时间。</p><div class="pw-actions"><button type="button" id="pw-goal-career" class="cursor-interaction">查看关联任务</button></div></div>
+      <div class="pw-simple-row"><div class="pw-row"><h2>保持英语写作练习</h2><span class="pw-tag">持续学习</span></div><p>每次练习一个明确问题，按反馈逐步调整。由英语教练负责。</p><div class="pw-actions"><button type="button" id="pw-goal-english" class="cursor-interaction">查看关联任务</button></div></div>
+      <p class="pw-inline-note">此页展示目标与任务的关系；目标创建和编辑交互将在后续细化。</p>
+    </section>
+    <section id="pw-team" aria-labelledby="pw-team-title" hidden>
+      <div class="pw-heading"><div><div class="pw-section-kicker">YOUR AGENT TEAM</div><h1 id="pw-team-title">Agent 团队</h1><p>职责清楚，记忆有来源，协作有边界。</p></div><span class="pw-tag">3 位内置角色</span></div>
+      <div class="pw-profile"><div class="pw-avatar">求</div><div><div class="pw-row"><h2>求职顾问</h2><span class="pw-tag" id="pw-team-career-status"></span></div><p>分析岗位、组织模拟面试，帮助你讲清项目决策与结果。</p><details><summary class="cursor-interaction">职责与记忆范围</summary><p>读取：求职目标、个人经历与本角色的回答记录。共享：任务摘要和时间需求。</p><p id="pw-team-career-memory"></p></details></div></div>
+      <div class="pw-profile"><div class="pw-avatar">英</div><div><div class="pw-row"><h2>英语教练</h2><span class="pw-tag" id="pw-team-english-status"></span></div><p>安排专项训练，记录练习反馈，给出下一次训练方向。</p><details><summary class="cursor-interaction">职责与记忆范围</summary><p>读取：学习目标、练习作答与本角色的学习记录。共享：训练任务与时间需求。</p><p id="pw-team-english-memory"></p></details></div></div>
+      <div class="pw-profile"><div class="pw-avatar">协</div><div><div class="pw-row"><h2>日程协调员</h2><span class="pw-tag">安排已就绪</span></div><p>汇总领域建议，在你的时间与优先级约束内形成安排。</p><details><summary class="cursor-interaction">职责与记忆范围</summary><p>读取：时间预算、优先级、任务摘要与完成状态。不默认读取原始练习全文。</p></details></div></div>
+      <p class="pw-inline-note">此页为角色管理的信息结构草图；配置、权限编辑和暂停尚未实现。</p>
+    </section>
+    <section id="pw-history" aria-labelledby="pw-history-title" hidden>
+      <div class="pw-heading"><div><div class="pw-section-kicker">ACTIVITY</div><h1 id="pw-history-title">执行记录</h1><p>查看本次会话的任务结果与已采用的建议。</p></div></div>
+      <div id="pw-history-list"></div>
+      <p class="pw-inline-note">仅展示你在本次草图中触发的状态；刷新后不保留执行记录。</p>
+    </section>
+    <p id="pw-notice" role="status" aria-live="polite"></p>
+  </main>
+  <footer class="pw-footer">交互草图 · 所有反馈为预设示例 · 回答与执行记录不持久保存</footer>
+  </div>
+</section>
+
+<script>
+(() => {
+  const root = document.getElementById('personal-workbench');
+  const el = id => root.querySelector('#pw-' + id);
+  const state = {
+    page: 'today', budget: 90, task: 'career', proposal: null,
+    answers: { career: '', english: '' },
+    status: { career: 'ready', english: 'ready' },
+    memory: { career: false, english: false }, error: ''
+  };
+  const design = { evidence: 'side', density: 'comfortable' };
+  const theme = { mode: 'neutral', neutral: 'dark', color: 'blue' };
+  const themeLabels = { light: '浅色', dark: '深色', blue: '雾蓝', green: '松绿', sand: '暖棕' };
+  const scenarios = {
+    career: { agent: '求职顾问', goal: '准备明天的产品经理面试（示例）',
+      full: '完整演练一次项目经历', short: '练好一道关键决策追问',
+      prompt: '请介绍一个你负责的产品项目：当时的问题是什么，你为什么选择这个方案，最后怎样验证结果？',
+      shortPrompt: '只练一道追问：你当时为什么选择这个方案，而不是另一个方案？请给出一个具体依据。',
+      example: '我负责过一个报名流程优化项目。访谈显示，用户经常不理解第二步需要提交的材料。我先调整了材料说明，因为它比重做整个流程更容易验证。上线后，我们对比了同一入口的完成情况。',
+      feedback: '示例观察：回答覆盖了问题和行动，但“为什么优先修改说明”与结果证据还可以更具体。这里展示的是反馈结构，不对你的实际能力下结论。',
+      next: '下一次练习补充一条决策依据和一条真实结果证据，不重新讲完整经历。' },
+    english: { agent: '英语教练', goal: '保持英语写作练习（示例）',
+      full: '写作练习：观点与论据', short: '只练一个论证段',
+      prompt: 'Write a short response: Should people work from home? State your opinion and support it with a specific example.',
+      shortPrompt: 'Write one short paragraph explaining one benefit of working from home. Include a specific example.',
+      example: 'Working from home can give people more time to focus. For example, a designer who avoids a long commute can use that time to review a proposal before the first meeting.',
+      feedback: '示例观察：段落先提出观点，再给出例子。后续可以补充例子与观点之间的因果解释。本草图不提供真实评分。',
+      next: '下一次只练“观点—例子—解释”的连接，不立即增加文章长度。' }
+  };
+  const statusLabels = { ready: '待你参与', running: '处理中（演示）', feedback: '反馈待查看', failed: '处理失败', done: '本次已完成' };
+  function duration(key, budget = state.budget) { return key === 'career' ? (budget === 90 ? 60 : 20) : (budget === 90 ? 20 : 10); }
+  function title(key, budget = state.budget) { return scenarios[key][budget === 90 ? 'full' : 'short']; }
+  function announce(message) { el('notice').textContent = message; }
+  function rememberNavigation() {
+    if (window.openai?.setWidgetState) {
+      window.openai.setWidgetState({ modelContent: { page: state.page, budget: state.budget, selectedTask: state.task }, privateContent: { theme: { ...theme } } })
+        .catch(() => console.warn('草图显示偏好未保存；当前交互仍可继续。'));
+    }
+  }
+  function restore(snapshot) {
+    const savedTheme = snapshot?.privateContent?.theme;
+    if (savedTheme) {
+      if (['neutral', 'color'].includes(savedTheme.mode)) theme.mode = savedTheme.mode;
+      if (['light', 'dark'].includes(savedTheme.neutral)) theme.neutral = savedTheme.neutral;
+      if (['blue', 'green', 'sand'].includes(savedTheme.color)) theme.color = savedTheme.color;
+    }
+    const saved = snapshot?.modelContent;
+    if (!saved) return;
+    if (['today', 'detail', 'goals', 'team', 'history'].includes(saved.page)) state.page = saved.page;
+    if (saved.budget === 30 || saved.budget === 90) state.budget = saved.budget;
+    if (saved.selectedTask === 'career' || saved.selectedTask === 'english') state.task = saved.selectedTask;
+    el('budget').value = String(state.budget);
+  }
+  function renderTheme() {
+    const neutral = theme.mode === 'neutral';
+    const active = neutral ? theme.neutral : theme.color;
+    root.dataset.theme = active;
+    el('mode-neutral').setAttribute('aria-pressed', String(neutral));
+    el('mode-color').setAttribute('aria-pressed', String(!neutral));
+    el('neutral-options').hidden = !neutral;
+    el('color-options').hidden = neutral;
+    for (const name of Object.keys(themeLabels)) el('theme-' + name).setAttribute('aria-pressed', String(name === active));
+  }
+  function changeTheme() {
+    renderTheme();
+    announce('已切换为' + themeLabels[root.dataset.theme] + '主题。');
+    rememberNavigation();
+  }
+  for (const mode of ['neutral', 'color']) el('mode-' + mode).addEventListener('click', () => { theme.mode = mode; changeTheme(); });
+  for (const name of ['light', 'dark']) el('theme-' + name).addEventListener('click', () => { theme.mode = 'neutral'; theme.neutral = name; changeTheme(); });
+  for (const name of ['blue', 'green', 'sand']) el('theme-' + name).addEventListener('click', () => { theme.mode = 'color'; theme.color = name; changeTheme(); });
+  function renderTasks() {
+    const list = el('task-list'); list.replaceChildren();
+    for (const key of ['career', 'english']) {
+      const item = document.createElement('article'); item.className = 'pw-task';
+      const body = document.createElement('div');
+      const heading = document.createElement('h3');
+      const index = document.createElement('span'); index.className = 'pw-index'; index.textContent = key === 'career' ? '01' : '02';
+      heading.append(index, document.createTextNode(title(key)));
+      const description = document.createElement('p');
+      description.textContent = state.memory[key] ? '下次建议已记录：' + scenarios[key].next : (key === 'career' ? '围绕你的真实经历，练习说清关键判断。' : '用一个具体例子支撑观点，完成后查看反馈。');
+      const meta = document.createElement('span'); meta.className = 'pw-meta'; meta.textContent = scenarios[key].agent + ' · ' + statusLabels[state.status[key]];
+      body.append(heading, description, meta);
+      const actions = document.createElement('div'); actions.className = 'pw-task-action';
+      const time = document.createElement('span'); time.className = 'pw-meta'; time.textContent = duration(key) + ' 分钟';
+      const button = document.createElement('button'); button.type = 'button'; button.className = 'cursor-interaction' + (key === 'career' ? ' pw-primary' : '');
+      button.textContent = state.status[key] === 'ready' ? '进入练习' : '查看任务';
+      button.setAttribute('aria-label', scenarios[key].agent + '：' + button.textContent);
+      button.addEventListener('click', () => navigate('detail', key));
+      actions.append(time, button); item.append(body, actions); list.append(item);
+    }
+  }
+  function renderDetail() {
+    const key = state.task, task = scenarios[key], status = state.status[key];
+    const busy = status === 'running', finished = status === 'done';
+    el('task-heading').textContent = title(key);
+    el('task-meta').textContent = task.agent + ' / ' + duration(key) + ' 分钟 / ' + task.goal;
+    el('detail-status').textContent = statusLabels[status];
+    el('prompt').textContent = state.budget === 90 ? task.prompt : task.shortPrompt;
+    el('answer').value = state.answers[key];
+    el('answer').disabled = busy || finished;
+    el('fill').disabled = busy || finished;
+    el('submit').disabled = busy || finished;
+    el('submit').textContent = finished ? '本次练习已结束' : '提交并预览反馈';
+    el('fail-next').disabled = busy || finished;
+    el('running').hidden = !busy;
+    el('failure').hidden = status !== 'failed';
+    el('feedback').hidden = status !== 'feedback' && !finished;
+    el('feedback-text').textContent = task.feedback;
+    el('next-step').textContent = task.next;
+    el('save-memory').disabled = state.memory[key];
+    el('save-memory').textContent = state.memory[key] ? '已采用建议' : '采用下次训练建议';
+    el('finish').disabled = finished;
+    el('finish').textContent = finished ? '本次已完成' : '结束本次练习';
+    el('memory-status').textContent = state.memory[key] ? '已在当前草图会话中记录；正式版本需持久保存并支持纠正。' : '采用前不写入长期偏好。';
+    el('origin').textContent = task.goal;
+    el('specialist').textContent = task.agent + '提出：' + task.full + '。';
+    el('coordination').textContent = state.budget === 90 ? '按面试优先分配时间，本任务保留 ' + duration(key) + ' 分钟。' : '你将可用时间改为 30 分钟并采用调整，本任务缩为 ' + duration(key) + ' 分钟：' + task.short + '。';
+    el('memory-evidence').textContent = state.memory[key] ? '来源：本次示例反馈 + 你采用的训练建议。内容：' + task.next : '目前没有经你采用的训练建议。示例目标属于场景设定，不代表你的真实资料。';
+    el('input-error').hidden = !state.error;
+    el('input-error').textContent = state.error;
+  }
+  function render() {
+    renderTheme();
+    for (const page of ['today', 'detail', 'goals', 'team', 'history']) el(page).hidden = state.page !== page;
+    for (const page of ['today', 'goals', 'team', 'history']) el('nav-' + page).setAttribute('aria-pressed', String(state.page === page || (page === 'today' && state.page === 'detail')));
+    el('breadcrumb').textContent = { today: '今天', detail: '今天 / 任务详情', goals: '目标', team: 'Agent 团队', history: '执行记录' }[state.page];
+    const career = duration('career'), english = duration('english'), buffer = state.budget - career - english;
+    el('allocation').textContent = '求职 ' + career + ' 分钟 · 英语 ' + english + ' 分钟' + (buffer ? ' · 预留 ' + buffer + ' 分钟' : ' · 无预留时间');
+    el('plan-label').textContent = '当前安排 ' + state.budget + ' 分钟';
+    el('bar-career').style.flex = String(career); el('bar-english').style.flex = String(english); el('bar-buffer').style.flex = String(buffer); el('bar-buffer').hidden = buffer === 0;
+    el('career-status').textContent = statusLabels[state.status.career]; el('english-status').textContent = statusLabels[state.status.english];
+    el('plan-reason').textContent = state.budget === 90 ? '示例约束：明天有面试，求职优先。先用 60 分钟演练项目经历，再用 20 分钟练习英语，预留 10 分钟。' : '在面试优先的前提下，将完整演练改为一道关键追问，将英语练习改为一个论证段；长任务剩余部分待后续安排。';
+    el('proposal').hidden = state.proposal === null;
+    renderTasks(); renderDetail(); renderOverview();
+  }
+  function renderOverview() {
+    const history = el('history-list'); history.replaceChildren();
+    for (const key of ['career', 'english']) {
+      el('team-' + key + '-status').textContent = statusLabels[state.status[key]];
+      el('team-' + key + '-memory').textContent = state.memory[key] ? '本次已采用：' + scenarios[key].next : '目前没有在本次会话中采用的训练建议。';
+      if (state.status[key] === 'ready') continue;
+      const row = document.createElement('article'); row.className = 'pw-simple-row';
+      const heading = document.createElement('h2'); heading.textContent = title(key);
+      const meta = document.createElement('p'); meta.textContent = scenarios[key].agent + ' · ' + statusLabels[state.status[key]];
+      const button = document.createElement('button'); button.type = 'button'; button.className = 'cursor-interaction'; button.textContent = '查看' + scenarios[key].agent + '任务';
+      button.addEventListener('click', () => navigate('detail', key)); row.append(heading, meta, button); history.append(row);
+    }
+    if (!history.childElementCount) { const empty = document.createElement('p'); empty.className = 'pw-empty'; empty.textContent = '还没有执行记录。完成一次练习后，结果会出现在这里。'; history.append(empty); }
+  }
+  function navigate(page, key = state.task) {
+    state.page = page; state.task = key; state.error = ''; el('fail-next').checked = false;
+    if (page === 'detail') { state.proposal = null; el('budget').value = String(state.budget); }
+    render(); announce(page === 'detail' ? '已打开' + scenarios[key].agent + '的任务。' : ''); rememberNavigation();
+  }
+  for (const page of ['today', 'goals', 'team', 'history']) el('nav-' + page).addEventListener('click', () => navigate(page));
+  el('back').addEventListener('click', () => navigate('today'));
+  el('goal-career').addEventListener('click', () => navigate('detail', 'career'));
+  el('goal-english').addEventListener('click', () => navigate('detail', 'english'));
+  el('budget').addEventListener('change', () => { state.proposal = null; el('proposal').hidden = true; announce('时间选择尚未生效，请查看调整。'); });
+  el('propose').addEventListener('click', () => {
+    const next = Number(el('budget').value);
+    if (next === state.budget) { announce('所选时间与当前安排相同。'); return; }
+    if (Object.values(state.status).some(status => status !== 'ready')) {
+      el('budget').value = String(state.budget);
+      announce('本草图仅演示练习开始前的重新安排；已完成或进行中的任务重排留待后续设计。'); return;
+    }
+    state.proposal = next;
+    el('proposal-reason').textContent = next === 30 ? '时间减少 60 分钟。按示例中的面试优先规则，缩小两项任务范围；当前安排尚未改变。' : '时间恢复到 90 分钟，可以恢复完整练习并留出缓冲；当前安排尚未改变。';
+    el('proposal-list').replaceChildren();
+    for (const key of ['career', 'english']) {
+      const line = document.createElement('li');
+      line.textContent = scenarios[key].agent + '：' + title(key) + '（' + duration(key) + ' 分钟） → ' + title(key, next) + '（' + duration(key, next) + ' 分钟）';
+      el('proposal-list').append(line);
+    }
+    render(); announce('新的任务调整建议已展开，原安排仍然保留。');
+  });
+  el('accept').addEventListener('click', () => {
+    if (state.proposal === null) return;
+    state.budget = state.proposal; state.proposal = null; render(); announce('已采用新安排，两位教练的任务范围同步更新。'); rememberNavigation();
+  });
+  el('cancel').addEventListener('click', () => { state.proposal = null; el('budget').value = String(state.budget); render(); announce('保留原安排。'); });
+  el('answer').addEventListener('input', event => { state.answers[state.task] = event.target.value; state.error = ''; el('input-error').hidden = true; });
+  el('fill').addEventListener('click', () => { state.answers[state.task] = scenarios[state.task].example; state.error = ''; renderDetail(); announce('已填入可编辑的示例回答。'); });
+  function submit(simulateFailure) {
+    const key = state.task;
+    if (state.status[key] === 'running' || state.status[key] === 'done') return;
+    if (!state.answers[key].trim()) { state.error = '请先输入回答，或填入示例回答。'; renderDetail(); return; }
+    state.status[key] = 'running'; state.error = ''; render(); announce('正在演示处理过程，没有调用模型。');
+    setTimeout(() => {
+      state.status[key] = simulateFailure ? 'failed' : 'feedback';
+      render(); announce(simulateFailure ? '已显示模拟失败状态，回答已保留。' : '示例反馈已就绪，等待你查看并结束练习。');
+    }, 700);
+  }
+  el('submit').addEventListener('click', () => { const fail = el('fail-next').checked; el('fail-next').checked = false; submit(fail); });
+  el('retry').addEventListener('click', () => submit(false));
+  el('save-memory').addEventListener('click', () => { state.memory[state.task] = true; render(); announce('下次训练建议已记录在当前草图会话中。'); });
+  el('finish').addEventListener('click', () => { if (state.status[state.task] !== 'feedback') return; state.status[state.task] = 'done'; render(); announce('本次练习已结束，今日任务状态同步更新。'); });
+  restore(window.openai?.widgetState);
+  render();
+  window.addEventListener('openai:set_globals', event => { if (event.detail?.globals?.widgetState) { restore(event.detail.globals.widgetState); render(); } });
+  if (globalThis.Tweak) {
+    const tweak = new Tweak({ container: root, onChange: () => { root.dataset.evidence = design.evidence; root.dataset.density = design.density; } });
+    tweak.addSelect(design, 'evidence', { label: '协作依据位置', options: [{ label: '右侧并排', value: 'side' }, { label: '正文下方', value: 'below' }] });
+    tweak.addSelect(design, 'density', { label: '任务列表密度', options: [{ label: '舒展', value: 'comfortable' }, { label: '紧凑', value: 'compact' }] });
+  }
+})();
+</script>
